@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/hero.png" alt="Lifesaver macOS App" width="100%" />
+</p>
+
 # Lifesaver
 
 A minimalist, high-velocity goal and daily execution system for macOS built with **SwiftUI** and **SwiftData**.
