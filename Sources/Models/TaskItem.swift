@@ -13,6 +13,7 @@ public final class TaskItem {
     public var createdAt: Date = Date.now
     public var scheduledTime: Date?
     public var durationMinutes: Int = 30
+    public var loggedMinutes: Int = 0
     public var completedAt: Date?
     public var orderIndex: Int = 0
     public var isLoggedWin: Bool = false
@@ -143,5 +144,18 @@ public final class TaskItem {
 
     public var effectiveEndTime: Date {
         Calendar.current.date(byAdding: .minute, value: max(5, durationMinutes), to: effectiveStartTime) ?? effectiveStartTime
+    }
+
+    public var formattedLoggedTime: String {
+        guard loggedMinutes > 0 else { return "0m" }
+        let h = loggedMinutes / 60
+        let m = loggedMinutes % 60
+        if h > 0 && m > 0 {
+            return "\(h)h \(m)m"
+        } else if h > 0 {
+            return "\(h)h"
+        } else {
+            return "\(m)m"
+        }
     }
 }

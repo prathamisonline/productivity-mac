@@ -75,7 +75,7 @@ public struct MainGoalAppView: View {
                     StreakPillView(store: store)
 
                     Button(action: {
-                        store.newGoalTargetType = store.selectedGoalTab
+                        store.newGoalTargetType = store.selectedGoalTab.goalType ?? .daily
                         store.isNewGoalSheetPresented = true
                     }) {
                         HStack(spacing: 4) {

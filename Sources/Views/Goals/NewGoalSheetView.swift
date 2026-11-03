@@ -250,7 +250,7 @@ public struct NewGoalSheetView: View {
             iconName: selectedIcon
         )
         // Set active slider tab to the created goal's type
-        store.selectedGoalTab = selectedType
+        store.selectedGoalTab = GoalItem.AppStageTab(rawValue: selectedType.rawValue) ?? .longTerm
         dismiss()
     }
 }

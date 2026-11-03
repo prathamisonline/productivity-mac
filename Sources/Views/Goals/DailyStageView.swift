@@ -223,6 +223,25 @@ public struct DailyStageView: View {
                     .buttonStyle(.plain)
 
                     Spacer()
+
+                    Button(action: {
+                        withAnimation(ThemeTokens.smoothSpring) {
+                            store.slideNextTab()
+                        }
+                    }) {
+                        HStack(spacing: 6) {
+                            Text("Proceed to Matrices")
+                                .font(.system(size: 13, weight: .bold))
+                            Image(systemName: "arrow.right")
+                                .font(.system(size: 11, weight: .bold))
+                        }
+                        .foregroundStyle(ThemeTokens.structuredPurple)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 10)
+                        .background(ThemeTokens.structuredPurple.opacity(0.10))
+                        .clipShape(Capsule())
+                    }
+                    .buttonStyle(.plain)
                 }
                 .padding(.top, 12)
             }

@@ -13,6 +13,7 @@ public struct GoalFlowContainerView: View {
         case .longTerm: return 0
         case .shortTerm: return 1
         case .daily: return 2
+        case .matrices: return 3
         }
     }
 
@@ -31,6 +32,9 @@ public struct GoalFlowContainerView: View {
 
                     DailyStageView(store: store)
                         .frame(width: width)
+
+                    MatricesStageView(store: store)
+                        .frame(width: width)
                 }
                 .offset(x: -CGFloat(activeIndex) * width + dragOffset)
                 .animation(ThemeTokens.smoothSpring, value: activeIndex)
@@ -39,7 +43,7 @@ public struct GoalFlowContainerView: View {
                         .updating($dragOffset) { value, state, _ in
                             // Resistance on bounds
                             let translation = value.translation.width
-                            if (activeIndex == 0 && translation > 0) || (activeIndex == 2 && translation < 0) {
+                            if (activeIndex == 0 && translation > 0) || (activeIndex == 3 && translation < 0) {
                                 state = translation * 0.3
                             } else {
                                 state = translation
@@ -69,7 +73,7 @@ public struct GoalFlowContainerView: View {
 
     // MARK: - Bottom Stage Progression Track
     private var bottomStageProgressionBar: some View {
-        HStack(spacing: 16) {
+        HStack(spacing: 14) {
             stageNode(
                 index: 0,
                 type: .longTerm,
@@ -97,6 +101,16 @@ public struct GoalFlowContainerView: View {
                 label: "Daily Action",
                 color: ThemeTokens.structuredGreen
             )
+
+            stageConnector(isActive: activeIndex >= 3, color: ThemeTokens.structuredPurple)
+
+            stageNode(
+                index: 3,
+                type: .matrices,
+                number: "4",
+                label: "Matrices & Analytics",
+                color: ThemeTokens.structuredPurple
+            )
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 10)
@@ -105,7 +119,7 @@ public struct GoalFlowContainerView: View {
     }
 
     @ViewBuilder
-    private func stageNode(index: Int, type: GoalItem.GoalType, number: String, label: String, color: Color) -> some View {
+    private func stageNode(index: Int, type: GoalItem.AppStageTab, number: String, label: String, color: Color) -> some View {
         let isCurrent = activeIndex == index
 
         Button(action: {

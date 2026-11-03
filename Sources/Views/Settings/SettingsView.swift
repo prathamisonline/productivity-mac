@@ -229,12 +229,12 @@ public struct SettingsView: View {
                         .font(.system(size: 13, weight: .medium))
                     Spacer()
                     Picker("", selection: $store.selectedGoalTab) {
-                        ForEach(GoalItem.GoalType.allCases) { type in
+                        ForEach(GoalItem.AppStageTab.allCases) { type in
                             Text(type.shortName).tag(type)
                         }
                     }
                     .pickerStyle(.segmented)
-                    .frame(width: 240)
+                    .frame(width: 290)
                 }
 
                 Divider()

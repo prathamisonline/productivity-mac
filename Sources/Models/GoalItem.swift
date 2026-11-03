@@ -59,6 +59,51 @@ public final class GoalItem: Identifiable {
         }
     }
 
+    public enum AppStageTab: String, CaseIterable, Identifiable {
+        case longTerm = "longTerm"
+        case shortTerm = "shortTerm"
+        case daily = "daily"
+        case matrices = "matrices"
+
+        public var id: String { rawValue }
+
+        public var displayName: String {
+            switch self {
+            case .longTerm: return "Long-Term Goals"
+            case .shortTerm: return "Short-Term Goals"
+            case .daily: return "Daily Goals"
+            case .matrices: return "Time & Metrics Matrix"
+            }
+        }
+
+        public var shortName: String {
+            switch self {
+            case .longTerm: return "Long-Term"
+            case .shortTerm: return "Short-Term"
+            case .daily: return "Daily"
+            case .matrices: return "Matrices"
+            }
+        }
+
+        public var icon: String {
+            switch self {
+            case .longTerm: return "target"
+            case .shortTerm: return "bolt.fill"
+            case .daily: return "calendar"
+            case .matrices: return "chart.bar.xaxis"
+            }
+        }
+
+        public var goalType: GoalType? {
+            switch self {
+            case .longTerm: return .longTerm
+            case .shortTerm: return .shortTerm
+            case .daily: return .daily
+            case .matrices: return nil
+            }
+        }
+    }
+
     public var goalType: GoalType {
         get { GoalType(rawValue: goalTypeRaw) ?? .longTerm }
         set { goalTypeRaw = newValue.rawValue }

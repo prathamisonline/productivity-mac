@@ -163,12 +163,16 @@ extension LifesaverStore {
         case .shortTerm:
             selectedGoalTab = .daily
         case .daily:
+            selectedGoalTab = .matrices
+        case .matrices:
             break
         }
     }
 
     public func slidePrevTab() {
         switch selectedGoalTab {
+        case .matrices:
+            selectedGoalTab = .daily
         case .daily:
             selectedGoalTab = .shortTerm
         case .shortTerm:
@@ -176,6 +180,73 @@ extension LifesaverStore {
         case .longTerm:
             break
         }
+    }
+
+    // MARK: - Time Logging & Metrics Helpers
+
+    public func logTimeToTask(_ task: TaskItem, minutes: Int) {
+        task.loggedMinutes = max(0, task.loggedMinutes + minutes)
+        notifyChange()
+    }
+
+    public func allLoggedTasks() -> [TaskItem] {
+        _ = revision
+        let descriptor = FetchDescriptor<TaskItem>(
+            sortBy: [SortDescriptor(\.createdAt, order: .reverse)]
+        )
+        return (try? modelContext.fetch(descriptor)) ?? []
+    }
+
+    public func loggedMinutes(for date: Date) -> Int {
+        _ = revision
+        let start = Calendar.current.startOfDay(for: date)
+        guard let end = Calendar.current.date(byAdding: .day, value: 1, to: start) else { return 0 }
+        let all = allLoggedTasks()
+        return all.filter { task in
+            let d = task.planDay?.date ?? task.completedAt ?? task.createdAt
+            return d >= start && d < end
+        }.reduce(0) { $0 + $1.loggedMinutes }
+    }
+
+    public func completedTasksCount(for date: Date) -> Int {
+        _ = revision
+        let start = Calendar.current.startOfDay(for: date)
+        guard let end = Calendar.current.date(byAdding: .day, value: 1, to: start) else { return 0 }
+        let all = allLoggedTasks()
+        return all.filter { task in
+            task.isCompleted && (task.completedAt ?? task.createdAt) >= start && (task.completedAt ?? task.createdAt) < end
+        }.count
+    }
+
+    public func totalLoggedMinutesThisWeek() -> Int {
+        let today = Calendar.current.startOfDay(for: Date.now)
+        let weekday = Calendar.current.component(.weekday, from: today) // Sunday=1, Monday=2
+        let daysFromMonday = (weekday + 5) % 7
+        guard let startOfWeek = Calendar.current.date(byAdding: .day, value: -daysFromMonday, to: today) else { return 0 }
+
+        var total = 0
+        for i in 0..<7 {
+            if let dayDate = Calendar.current.date(byAdding: .day, value: i, to: startOfWeek) {
+                total += loggedMinutes(for: dayDate)
+            }
+        }
+        return total
+    }
+
+    public func totalLoggedMinutesThisMonth() -> Int {
+        let calendar = Calendar.current
+        let today = Date.now
+        let components = calendar.dateComponents([.year, .month], from: today)
+        guard let startOfMonth = calendar.date(from: components),
+              let range = calendar.range(of: .day, in: .month, for: today) else { return 0 }
+
+        var total = 0
+        for i in 0..<range.count {
+            if let dayDate = calendar.date(byAdding: .day, value: i, to: startOfMonth) {
+                total += loggedMinutes(for: dayDate)
+            }
+        }
+        return total
     }
 
     // MARK: - Seed Initial Sample Data

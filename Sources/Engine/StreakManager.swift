@@ -167,9 +167,29 @@ public final class StreakManager {
 
         currentFrozen.insert(yesterday)
         self.frozenDates = currentFrozen
-        self.freezesRemaining -= 1
+        self.freezesRemaining = max(0, self.freezesRemaining - 1)
         recalculate(store: store)
         return true
+    }
+
+    public func unfreezeYesterday(store: LifesaverStore) -> Bool {
+        let today = Calendar.current.startOfDay(for: Date.now)
+        guard let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today) else { return false }
+
+        var currentFrozen = frozenDates
+        guard currentFrozen.contains(yesterday) else { return false }
+
+        currentFrozen.remove(yesterday)
+        self.frozenDates = currentFrozen
+        self.freezesRemaining = min(2, self.freezesRemaining + 1)
+        recalculate(store: store)
+        return true
+    }
+
+    public func resetAllFreezes(store: LifesaverStore) {
+        self.frozenDates = []
+        self.freezesRemaining = 2
+        recalculate(store: store)
     }
 }
 

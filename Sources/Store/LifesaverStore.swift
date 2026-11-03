@@ -29,8 +29,8 @@ public final class LifesaverStore {
     public var rescueTargetTask: TaskItem?
     public var revision: Int = 0
 
-    // MARK: - 3-Tier Goal Slider State
-    public var selectedGoalTab: GoalItem.GoalType = .longTerm
+    // MARK: - 4-Stage Slider State (Long-Term, Short-Term, Daily, Matrices)
+    public var selectedGoalTab: GoalItem.AppStageTab = .longTerm
     public var isNewGoalSheetPresented: Bool = false
     public var newGoalTargetType: GoalItem.GoalType = .longTerm
 

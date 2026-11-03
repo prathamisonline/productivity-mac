@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7A35F4829BB14CD39FE301AA /* Sources/Views/Goals/GitHubYearlyActivityMatrixView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B49E7C2A10D49EFB017688F /* Sources/Views/Goals/GitHubYearlyActivityMatrixView.swift */; };
+		933C71751603454F2C39748E /* Sources/Views/Goals/TaskTimeLogPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C7B91539F15ECC596C4A62 /* Sources/Views/Goals/TaskTimeLogPopover.swift */; };
+		81E634B919DA4128FBFD5354 /* Sources/Views/Goals/MatricesStageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A650DC8CC367BC4CEBDD3582 /* Sources/Views/Goals/MatricesStageView.swift */; };
 		18D2A149E8326356BF0D20DE /* Sources/Engine/StreakManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59405B396A0B9325C506D460 /* Sources/Engine/StreakManager.swift */; };
 		233EAB4BF9CB8CF2E79A59CD /* Sources/Views/Goals/StreakPillView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1526A2C7FB9694D47D22B7B5 /* Sources/Views/Goals/StreakPillView.swift */; };
 		57730A10EA763C6FC92F5C68 /* Sources/Views/Goals/StreakDetailPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35E93810D2B3AD7B4DB7BD9D /* Sources/Views/Goals/StreakDetailPopover.swift */; };
@@ -36,6 +39,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8B49E7C2A10D49EFB017688F /* Sources/Views/Goals/GitHubYearlyActivityMatrixView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/Goals/GitHubYearlyActivityMatrixView.swift; sourceTree = "<group>"; };
+		47C7B91539F15ECC596C4A62 /* Sources/Views/Goals/TaskTimeLogPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/Goals/TaskTimeLogPopover.swift; sourceTree = "<group>"; };
+		A650DC8CC367BC4CEBDD3582 /* Sources/Views/Goals/MatricesStageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/Goals/MatricesStageView.swift; sourceTree = "<group>"; };
 		59405B396A0B9325C506D460 /* Sources/Engine/StreakManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Engine/StreakManager.swift; sourceTree = "<group>"; };
 		1526A2C7FB9694D47D22B7B5 /* Sources/Views/Goals/StreakPillView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/Goals/StreakPillView.swift; sourceTree = "<group>"; };
 		35E93810D2B3AD7B4DB7BD9D /* Sources/Views/Goals/StreakDetailPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/Goals/StreakDetailPopover.swift; sourceTree = "<group>"; };
@@ -79,6 +85,9 @@
 		A00000000000000000000002 = {
 			isa = PBXGroup;
 			children = (
+				8B49E7C2A10D49EFB017688F /* Sources/Views/Goals/GitHubYearlyActivityMatrixView.swift */,
+				47C7B91539F15ECC596C4A62 /* Sources/Views/Goals/TaskTimeLogPopover.swift */,
+				A650DC8CC367BC4CEBDD3582 /* Sources/Views/Goals/MatricesStageView.swift */,
 				59405B396A0B9325C506D460 /* Sources/Engine/StreakManager.swift */,
 				1526A2C7FB9694D47D22B7B5 /* Sources/Views/Goals/StreakPillView.swift */,
 				35E93810D2B3AD7B4DB7BD9D /* Sources/Views/Goals/StreakDetailPopover.swift */,
@@ -192,6 +201,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A35F4829BB14CD39FE301AA /* Sources/Views/Goals/GitHubYearlyActivityMatrixView.swift in Sources */,
+				933C71751603454F2C39748E /* Sources/Views/Goals/TaskTimeLogPopover.swift in Sources */,
+				81E634B919DA4128FBFD5354 /* Sources/Views/Goals/MatricesStageView.swift in Sources */,
 				18D2A149E8326356BF0D20DE /* Sources/Engine/StreakManager.swift in Sources */,
 				233EAB4BF9CB8CF2E79A59CD /* Sources/Views/Goals/StreakPillView.swift in Sources */,
 				57730A10EA763C6FC92F5C68 /* Sources/Views/Goals/StreakDetailPopover.swift in Sources */,

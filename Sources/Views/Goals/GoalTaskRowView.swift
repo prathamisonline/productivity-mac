@@ -5,6 +5,7 @@ public struct GoalTaskRowView: View {
     @Bindable var task: TaskItem
 
     @State private var isHovering: Bool = false
+    @State private var isTimeLogPresented: Bool = false
 
     public init(store: LifesaverStore, task: TaskItem) {
         self.store = store
@@ -70,6 +71,37 @@ public struct GoalTaskRowView: View {
             .buttonStyle(.plain)
 
             Spacer()
+
+            // Time Logging Pill
+            Button(action: {
+                isTimeLogPresented.toggle()
+            }) {
+                HStack(spacing: 4) {
+                    Image(systemName: "clock")
+                        .font(.system(size: 9, weight: .semibold))
+                    if task.loggedMinutes > 0 {
+                        Text(task.formattedLoggedTime)
+                            .font(.system(size: 11, weight: .bold, design: .monospaced))
+                    } else {
+                        Text("+Time")
+                            .font(.system(size: 10, weight: .medium))
+                    }
+                }
+                .foregroundStyle(task.loggedMinutes > 0 ? ThemeTokens.structuredBlue : Color.secondary.opacity(isHovering ? 0.8 : 0.4))
+                .padding(.horizontal, 7)
+                .padding(.vertical, 3)
+                .background(
+                    task.loggedMinutes > 0
+                    ? ThemeTokens.structuredBlue.opacity(0.12)
+                    : Color.primary.opacity(isHovering ? 0.06 : 0.02)
+                )
+                .clipShape(Capsule())
+            }
+            .buttonStyle(.plain)
+            .help("Log time for this task")
+            .popover(isPresented: $isTimeLogPresented, arrowEdge: .top) {
+                TaskTimeLogPopover(store: store, task: task)
+            }
 
             // Delete Task Button
             Button(action: {

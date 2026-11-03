@@ -253,7 +253,7 @@ public struct EditGoalSheetView: View {
                 iconName: selectedIcon
             )
             // If the user changed the tier, switch the view to that stage
-            store.selectedGoalTab = selectedType
+            store.selectedGoalTab = GoalItem.AppStageTab(rawValue: selectedType.rawValue) ?? .longTerm
             dismiss()
         }
     }

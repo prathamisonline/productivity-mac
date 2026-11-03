@@ -13,6 +13,7 @@ public struct TopCenterSliderBar: View {
         case .longTerm: return 0
         case .shortTerm: return 1
         case .daily: return 2
+        case .matrices: return 3
         }
     }
 
@@ -38,9 +39,9 @@ public struct TopCenterSliderBar: View {
 
             // Center Sliding Capsule
             HStack(spacing: 4) {
-                ForEach(GoalItem.GoalType.allCases) { type in
+                ForEach(GoalItem.AppStageTab.allCases) { type in
                     let isSelected = store.selectedGoalTab == type
-                    let count = goalCount(for: type)
+                    let labelCount = tabCount(for: type)
 
                     Button(action: {
                         withAnimation(ThemeTokens.smoothSpring) {
@@ -55,8 +56,8 @@ public struct TopCenterSliderBar: View {
                                 .font(.system(size: 12, weight: isSelected ? .bold : .medium))
 
                             // Counter pill
-                            Text("\(count)")
-                                .font(.system(size: 10, weight: .bold))
+                            Text(labelCount)
+                                .font(.system(size: 10, weight: .bold, design: .monospaced))
                                 .padding(.horizontal, 6)
                                 .padding(.vertical, 2)
                                 .background(
@@ -97,31 +98,43 @@ public struct TopCenterSliderBar: View {
             }) {
                 Image(systemName: "chevron.right")
                     .font(.system(size: 11, weight: .bold))
-                    .foregroundStyle(currentIndex < 2 ? Color.primary : Color.secondary.opacity(0.3))
+                    .foregroundStyle(currentIndex < 3 ? Color.primary : Color.secondary.opacity(0.3))
                     .frame(width: 28, height: 28)
-                    .background(Color.primary.opacity(currentIndex < 2 ? 0.06 : 0.02))
+                    .background(Color.primary.opacity(currentIndex < 3 ? 0.06 : 0.02))
                     .clipShape(Circle())
             }
             .buttonStyle(.plain)
-            .disabled(currentIndex == 2)
+            .disabled(currentIndex == 3)
             .help("Slide to Next Stage (⌘→)")
             .keyboardShortcut(.rightArrow, modifiers: .command)
         }
     }
 
-    private func goalCount(for type: GoalItem.GoalType) -> Int {
-        store.fetchGoals(for: type).count
+    private func tabCount(for type: GoalItem.AppStageTab) -> String {
+        switch type {
+        case .longTerm:
+            return "\(store.fetchGoals(for: .longTerm).count)"
+        case .shortTerm:
+            return "\(store.fetchGoals(for: .shortTerm).count)"
+        case .daily:
+            return "\(store.allDailyTasks().count)"
+        case .matrices:
+            let mins = store.totalLoggedMinutesThisWeek()
+            let h = mins / 60
+            return h > 0 ? "\(h)h" : "\(mins)m"
+        }
     }
 
-    private func accentColor(for type: GoalItem.GoalType) -> Color {
+    private func accentColor(for type: GoalItem.AppStageTab) -> Color {
         switch type {
         case .longTerm: return ThemeTokens.structuredCoral
         case .shortTerm: return ThemeTokens.structuredBlue
         case .daily: return ThemeTokens.structuredGreen
+        case .matrices: return ThemeTokens.structuredPurple
         }
     }
 
-    private func accentGradient(for type: GoalItem.GoalType) -> LinearGradient {
+    private func accentGradient(for type: GoalItem.AppStageTab) -> LinearGradient {
         switch type {
         case .longTerm:
             return LinearGradient(
@@ -138,6 +151,12 @@ public struct TopCenterSliderBar: View {
         case .daily:
             return LinearGradient(
                 colors: [ThemeTokens.structuredGreen, Color(red: 0.15, green: 0.70, blue: 0.45)],
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+        case .matrices:
+            return LinearGradient(
+                colors: [ThemeTokens.structuredPurple, Color(red: 0.40, green: 0.45, blue: 0.90)],
                 startPoint: .leading,
                 endPoint: .trailing
             )
