@@ -1,0 +1,353 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		18D2A149E8326356BF0D20DE /* Sources/Engine/StreakManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59405B396A0B9325C506D460 /* Sources/Engine/StreakManager.swift */; };
+		233EAB4BF9CB8CF2E79A59CD /* Sources/Views/Goals/StreakPillView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1526A2C7FB9694D47D22B7B5 /* Sources/Views/Goals/StreakPillView.swift */; };
+		57730A10EA763C6FC92F5C68 /* Sources/Views/Goals/StreakDetailPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35E93810D2B3AD7B4DB7BD9D /* Sources/Views/Goals/StreakDetailPopover.swift */; };
+		C4999D3EC68E122C7ACE500D /* Sources/Views/Goals/GoalTaskRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E613948363B8A266C80716 /* Sources/Views/Goals/GoalTaskRowView.swift */; };
+		1862D2991FA416694B4AE5D1 /* Sources/Views/Settings/SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ADEA8944998F52FFEEB4323 /* Sources/Views/Settings/SettingsView.swift */; };
+		7FF6D12CF1203336DED40967 /* Sources/Views/Goals/TimeframePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CD1ECF3CDE176D8D65A892 /* Sources/Views/Goals/TimeframePickerView.swift */; };
+		3F1D0388BCE1C553974091B7 /* Sources/Views/Goals/EditGoalSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B1E46B017F628FFB713EA6 /* Sources/Views/Goals/EditGoalSheetView.swift */; };
+		B869B3DD7F15A00C59015D3D /* Sources/Models/GoalItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A70D7F57C20C9923623E512 /* Sources/Models/GoalItem.swift */; };
+		B279D1B20E046DA81327EEAF /* Sources/Store/LifesaverStoreGoals.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46F3AA6B63DB48E470BB746 /* Sources/Store/LifesaverStoreGoals.swift */; };
+		B1D6FDC455798F8DB6F71CF5 /* Sources/Views/Goals/TopCenterSliderBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F46A18C843B9BAD96C0450 /* Sources/Views/Goals/TopCenterSliderBar.swift */; };
+		A1405E499225D868A8CF2A3C /* Sources/Views/Goals/GoalCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E24F6E9E8E80FE22CBC647 /* Sources/Views/Goals/GoalCardView.swift */; };
+		A0A11E27EC6131C7EA982AF5 /* Sources/Views/Goals/LongTermStageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8410F5D4F3830963AF4D1A4 /* Sources/Views/Goals/LongTermStageView.swift */; };
+		78DD50DB8A42320E86E35D90 /* Sources/Views/Goals/ShortTermStageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB88FEE81CB5DF8E3EFC2E7 /* Sources/Views/Goals/ShortTermStageView.swift */; };
+		995BEE16716830577D979DC1 /* Sources/Views/Goals/DailyStageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4960EC9FCEE97F65C9BB7E80 /* Sources/Views/Goals/DailyStageView.swift */; };
+		A8B22F7F063F28E315FA3E0E /* Sources/Views/Goals/GoalFlowContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765744BE7B4089B4798C648F /* Sources/Views/Goals/GoalFlowContainerView.swift */; };
+		695E6521F22E1A8356B6BC8F /* Sources/Views/Goals/NewGoalSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FAFFD1B1F193BF2D3951B9 /* Sources/Views/Goals/NewGoalSheetView.swift */; };
+		CCE3A26CFF8D414EB3785DCD /* Sources/Engine/NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF1F6A4FCDA4A8AA686113C /* Sources/Engine/NotificationManager.swift */; };
+		2FCD67B9CE884A9147CC29BE /* Sources/LifesaverApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E27C05BCCA8BBF62504CCC /* Sources/LifesaverApp.swift */; };
+		3B2FB0BF81AC24BD720FBC26 /* Sources/Theme/ThemeTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A015002EC21B65EF3A0750E /* Sources/Theme/ThemeTokens.swift */; };
+		4B42DF3BD1C82788F14DF434 /* Sources/Views/Shell/AppShellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57D9CDDB285BBDF58E068C8 /* Sources/Views/Shell/AppShellView.swift */; };
+		5E5B82C274B40FA5D8E401F3 /* Sources/Models/PlanWeek.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9224646CED41BB77CE37B6A /* Sources/Models/PlanWeek.swift */; };
+		6C87B147C1916CC1E5A28683 /* Sources/Models/PlanDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632C489CD5E6B74E41921519 /* Sources/Models/PlanDay.swift */; };
+		A15A4C9CD612ADD6F0DADE93 /* Sources/Store/iCloudDriveSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CE0A91949387FD02CA504E /* Sources/Store/iCloudDriveSyncManager.swift */; };
+		BB62425192AD5A14AA89C605 /* Sources/Store/LifesaverStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C1DADD601B2396BF6EE05C8 /* Sources/Store/LifesaverStore.swift */; };
+		C3D197876D469607CF0F02B0 /* Sources/Models/TaskItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2021FDA620ADD7C8D37922 /* Sources/Models/TaskItem.swift */; };
+		C42172866093D886144630EC /* Sources/Models/PomodoroSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F6A55002662EC40F1D496A /* Sources/Models/PomodoroSession.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		59405B396A0B9325C506D460 /* Sources/Engine/StreakManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Engine/StreakManager.swift; sourceTree = "<group>"; };
+		1526A2C7FB9694D47D22B7B5 /* Sources/Views/Goals/StreakPillView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/Goals/StreakPillView.swift; sourceTree = "<group>"; };
+		35E93810D2B3AD7B4DB7BD9D /* Sources/Views/Goals/StreakDetailPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/Goals/StreakDetailPopover.swift; sourceTree = "<group>"; };
+		E1E613948363B8A266C80716 /* Sources/Views/Goals/GoalTaskRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/Goals/GoalTaskRowView.swift; sourceTree = "<group>"; };
+		5ADEA8944998F52FFEEB4323 /* Sources/Views/Settings/SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/Settings/SettingsView.swift; sourceTree = "<group>"; };
+		A7CD1ECF3CDE176D8D65A892 /* Sources/Views/Goals/TimeframePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/Goals/TimeframePickerView.swift; sourceTree = "<group>"; };
+		01B1E46B017F628FFB713EA6 /* Sources/Views/Goals/EditGoalSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/Goals/EditGoalSheetView.swift; sourceTree = "<group>"; };
+		0A70D7F57C20C9923623E512 /* Sources/Models/GoalItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Models/GoalItem.swift; sourceTree = "<group>"; };
+		D46F3AA6B63DB48E470BB746 /* Sources/Store/LifesaverStoreGoals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Store/LifesaverStoreGoals.swift; sourceTree = "<group>"; };
+		69F46A18C843B9BAD96C0450 /* Sources/Views/Goals/TopCenterSliderBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/Goals/TopCenterSliderBar.swift; sourceTree = "<group>"; };
+		86E24F6E9E8E80FE22CBC647 /* Sources/Views/Goals/GoalCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/Goals/GoalCardView.swift; sourceTree = "<group>"; };
+		A8410F5D4F3830963AF4D1A4 /* Sources/Views/Goals/LongTermStageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/Goals/LongTermStageView.swift; sourceTree = "<group>"; };
+		CDB88FEE81CB5DF8E3EFC2E7 /* Sources/Views/Goals/ShortTermStageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/Goals/ShortTermStageView.swift; sourceTree = "<group>"; };
+		4960EC9FCEE97F65C9BB7E80 /* Sources/Views/Goals/DailyStageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/Goals/DailyStageView.swift; sourceTree = "<group>"; };
+		765744BE7B4089B4798C648F /* Sources/Views/Goals/GoalFlowContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/Goals/GoalFlowContainerView.swift; sourceTree = "<group>"; };
+		79FAFFD1B1F193BF2D3951B9 /* Sources/Views/Goals/NewGoalSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/Goals/NewGoalSheetView.swift; sourceTree = "<group>"; };
+		DBF1F6A4FCDA4A8AA686113C /* Sources/Engine/NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Engine/NotificationManager.swift; sourceTree = "<group>"; };
+		01E27C05BCCA8BBF62504CCC /* Sources/LifesaverApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/LifesaverApp.swift; sourceTree = "<group>"; };
+		3C1DADD601B2396BF6EE05C8 /* Sources/Store/LifesaverStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Store/LifesaverStore.swift; sourceTree = "<group>"; };
+		44CE0A91949387FD02CA504E /* Sources/Store/iCloudDriveSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Store/iCloudDriveSyncManager.swift; sourceTree = "<group>"; };
+		4A015002EC21B65EF3A0750E /* Sources/Theme/ThemeTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Theme/ThemeTokens.swift; sourceTree = "<group>"; };
+		52F6A55002662EC40F1D496A /* Sources/Models/PomodoroSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Models/PomodoroSession.swift; sourceTree = "<group>"; };
+		632C489CD5E6B74E41921519 /* Sources/Models/PlanDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Models/PlanDay.swift; sourceTree = "<group>"; };
+		7F2021FDA620ADD7C8D37922 /* Sources/Models/TaskItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Models/TaskItem.swift; sourceTree = "<group>"; };
+		A00000000000000000000006 /* Lifesaver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lifesaver.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A57D9CDDB285BBDF58E068C8 /* Sources/Views/Shell/AppShellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/Shell/AppShellView.swift; sourceTree = "<group>"; };
+		D9224646CED41BB77CE37B6A /* Sources/Models/PlanWeek.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Models/PlanWeek.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A00000000000000000000008 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A00000000000000000000002 = {
+			isa = PBXGroup;
+			children = (
+				59405B396A0B9325C506D460 /* Sources/Engine/StreakManager.swift */,
+				1526A2C7FB9694D47D22B7B5 /* Sources/Views/Goals/StreakPillView.swift */,
+				35E93810D2B3AD7B4DB7BD9D /* Sources/Views/Goals/StreakDetailPopover.swift */,
+				E1E613948363B8A266C80716 /* Sources/Views/Goals/GoalTaskRowView.swift */,
+				5ADEA8944998F52FFEEB4323 /* Sources/Views/Settings/SettingsView.swift */,
+				A7CD1ECF3CDE176D8D65A892 /* Sources/Views/Goals/TimeframePickerView.swift */,
+				01B1E46B017F628FFB713EA6 /* Sources/Views/Goals/EditGoalSheetView.swift */,
+				0A70D7F57C20C9923623E512 /* Sources/Models/GoalItem.swift */,
+				D46F3AA6B63DB48E470BB746 /* Sources/Store/LifesaverStoreGoals.swift */,
+				69F46A18C843B9BAD96C0450 /* Sources/Views/Goals/TopCenterSliderBar.swift */,
+				86E24F6E9E8E80FE22CBC647 /* Sources/Views/Goals/GoalCardView.swift */,
+				A8410F5D4F3830963AF4D1A4 /* Sources/Views/Goals/LongTermStageView.swift */,
+				CDB88FEE81CB5DF8E3EFC2E7 /* Sources/Views/Goals/ShortTermStageView.swift */,
+				4960EC9FCEE97F65C9BB7E80 /* Sources/Views/Goals/DailyStageView.swift */,
+				765744BE7B4089B4798C648F /* Sources/Views/Goals/GoalFlowContainerView.swift */,
+				79FAFFD1B1F193BF2D3951B9 /* Sources/Views/Goals/NewGoalSheetView.swift */,
+				DBF1F6A4FCDA4A8AA686113C /* Sources/Engine/NotificationManager.swift */,
+				A00000000000000000000003 /* Sources */,
+				A00000000000000000000004 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A00000000000000000000003 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				01E27C05BCCA8BBF62504CCC /* Sources/LifesaverApp.swift */,
+				632C489CD5E6B74E41921519 /* Sources/Models/PlanDay.swift */,
+				D9224646CED41BB77CE37B6A /* Sources/Models/PlanWeek.swift */,
+				52F6A55002662EC40F1D496A /* Sources/Models/PomodoroSession.swift */,
+				7F2021FDA620ADD7C8D37922 /* Sources/Models/TaskItem.swift */,
+				3C1DADD601B2396BF6EE05C8 /* Sources/Store/LifesaverStore.swift */,
+				44CE0A91949387FD02CA504E /* Sources/Store/iCloudDriveSyncManager.swift */,
+				4A015002EC21B65EF3A0750E /* Sources/Theme/ThemeTokens.swift */,
+				A57D9CDDB285BBDF58E068C8 /* Sources/Views/Shell/AppShellView.swift */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+		A00000000000000000000004 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A00000000000000000000006 /* Lifesaver.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A00000000000000000000005 /* Lifesaver */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A0000000000000000000000A /* Build configuration list for PBXNativeTarget "Lifesaver" */;
+			buildPhases = (
+				A00000000000000000000007 /* Sources */,
+				A00000000000000000000008 /* Frameworks */,
+				A00000000000000000000009 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Lifesaver;
+			productName = Lifesaver;
+			productReference = A00000000000000000000006 /* Lifesaver.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A00000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					A00000000000000000000005 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+				};
+			};
+			buildConfigurationList = A0000000000000000000000D /* Build configuration list for PBXProject "Lifesaver" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A00000000000000000000002;
+			productRefGroup = A00000000000000000000004 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A00000000000000000000005 /* Lifesaver */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A00000000000000000000009 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A00000000000000000000007 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				18D2A149E8326356BF0D20DE /* Sources/Engine/StreakManager.swift in Sources */,
+				233EAB4BF9CB8CF2E79A59CD /* Sources/Views/Goals/StreakPillView.swift in Sources */,
+				57730A10EA763C6FC92F5C68 /* Sources/Views/Goals/StreakDetailPopover.swift in Sources */,
+				C4999D3EC68E122C7ACE500D /* Sources/Views/Goals/GoalTaskRowView.swift in Sources */,
+				1862D2991FA416694B4AE5D1 /* Sources/Views/Settings/SettingsView.swift in Sources */,
+				7FF6D12CF1203336DED40967 /* Sources/Views/Goals/TimeframePickerView.swift in Sources */,
+				3F1D0388BCE1C553974091B7 /* Sources/Views/Goals/EditGoalSheetView.swift in Sources */,
+				B869B3DD7F15A00C59015D3D /* Sources/Models/GoalItem.swift in Sources */,
+				B279D1B20E046DA81327EEAF /* Sources/Store/LifesaverStoreGoals.swift in Sources */,
+				B1D6FDC455798F8DB6F71CF5 /* Sources/Views/Goals/TopCenterSliderBar.swift in Sources */,
+				A1405E499225D868A8CF2A3C /* Sources/Views/Goals/GoalCardView.swift in Sources */,
+				A0A11E27EC6131C7EA982AF5 /* Sources/Views/Goals/LongTermStageView.swift in Sources */,
+				78DD50DB8A42320E86E35D90 /* Sources/Views/Goals/ShortTermStageView.swift in Sources */,
+				995BEE16716830577D979DC1 /* Sources/Views/Goals/DailyStageView.swift in Sources */,
+				A8B22F7F063F28E315FA3E0E /* Sources/Views/Goals/GoalFlowContainerView.swift in Sources */,
+				695E6521F22E1A8356B6BC8F /* Sources/Views/Goals/NewGoalSheetView.swift in Sources */,
+				CCE3A26CFF8D414EB3785DCD /* Sources/Engine/NotificationManager.swift in Sources */,
+				2FCD67B9CE884A9147CC29BE /* Sources/LifesaverApp.swift in Sources */,
+				6C87B147C1916CC1E5A28683 /* Sources/Models/PlanDay.swift in Sources */,
+				5E5B82C274B40FA5D8E401F3 /* Sources/Models/PlanWeek.swift in Sources */,
+				C42172866093D886144630EC /* Sources/Models/PomodoroSession.swift in Sources */,
+				C3D197876D469607CF0F02B0 /* Sources/Models/TaskItem.swift in Sources */,
+				BB62425192AD5A14AA89C605 /* Sources/Store/LifesaverStore.swift in Sources */,
+				A15A4C9CD612ADD6F0DADE93 /* Sources/Store/iCloudDriveSyncManager.swift in Sources */,
+				3B2FB0BF81AC24BD720FBC26 /* Sources/Theme/ThemeTokens.swift in Sources */,
+				4B42DF3BD1C82788F14DF434 /* Sources/Views/Shell/AppShellView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A0000000000000000000000B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = H9HT9UQQWU;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Lifesaver;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.prathamsrivastava.lifesaver;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A0000000000000000000000C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = H9HT9UQQWU;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Lifesaver;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.prathamsrivastava.lifesaver;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		A0000000000000000000000E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A0000000000000000000000F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A0000000000000000000000A /* Build configuration list for PBXNativeTarget "Lifesaver" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A0000000000000000000000B /* Debug */,
+				A0000000000000000000000C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A0000000000000000000000D /* Build configuration list for PBXProject "Lifesaver" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A0000000000000000000000E /* Debug */,
+				A0000000000000000000000F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A00000000000000000000001 /* Project object */;
+}
