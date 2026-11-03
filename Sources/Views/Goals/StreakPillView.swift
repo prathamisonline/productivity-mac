@@ -49,8 +49,9 @@ public struct StreakPillView: View {
         }
         .buttonStyle(.plain)
         .help("Daily Streak Tracker")
-        .popover(isPresented: $showDetailPopover, arrowEdge: .bottom) {
+        .popover(isPresented: $showDetailPopover, arrowEdge: .top) {
             StreakDetailPopover(store: store)
+                .presentationCompactAdaptation(.popover)
         }
         .onAppear {
             streakManager.recalculate(store: store)

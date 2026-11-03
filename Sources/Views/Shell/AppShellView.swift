@@ -3,6 +3,7 @@ import SwiftData
 
 public struct AppShellView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.scenePhase) private var scenePhase
     @State private var store: LifesaverStore?
 
     public init() {}
@@ -19,6 +20,18 @@ public struct AppShellView: View {
         .onAppear {
             if store == nil {
                 store = LifesaverStore(modelContext: modelContext)
+            }
+            if let store {
+                Task { @MainActor in
+                    iCloudDriveSyncManager.shared.autoSync(store: store)
+                }
+            }
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .active, let store {
+                Task { @MainActor in
+                    iCloudDriveSyncManager.shared.autoSync(store: store)
+                }
             }
         }
         #if os(macOS)

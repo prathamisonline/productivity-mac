@@ -33,6 +33,7 @@ public struct SyncPayload: Codable {
         public let priorityRaw: Int
         public let estimatedPomodoros: Int
         public let completedPomodoros: Int
+        public let loggedMinutes: Int?
         public let createdAt: Date
         public let completedAt: Date?
         public let orderIndex: Int
@@ -55,9 +56,216 @@ public final class iCloudDriveSyncManager {
     public var lastSyncDate: Date?
     public var syncStatusMessage: String = "Ready to sync"
     public var isSyncing: Bool = false
+    public var hasLinkedFile: Bool = false
 
-    private init() {}
+    private let bookmarkKey = "Lifesaver_iCloudDrive_Bookmark"
 
+    #if os(macOS)
+    private let bookmarkCreationOpts: URL.BookmarkCreationOptions = [.withSecurityScope]
+    private let bookmarkResolutionOpts: URL.BookmarkResolutionOptions = [.withSecurityScope]
+    #else
+    private let bookmarkCreationOpts: URL.BookmarkCreationOptions = []
+    private let bookmarkResolutionOpts: URL.BookmarkResolutionOptions = []
+    #endif
+
+    private init() {
+        checkLinkedStatus()
+    }
+
+    public func checkLinkedStatus() {
+        if UserDefaults.standard.data(forKey: bookmarkKey) != nil {
+            hasLinkedFile = true
+        } else if FileManager.default.url(forUbiquityContainerIdentifier: nil) != nil {
+            hasLinkedFile = true
+        } else {
+            #if os(macOS)
+            hasLinkedFile = true
+            #else
+            hasLinkedFile = false
+            #endif
+        }
+    }
+
+    // MARK: - Save Security-Scoped Bookmark (For iPad & iOS)
+    public func saveBookmark(for url: URL) {
+        guard url.startAccessingSecurityScopedResource() else { return }
+        defer { url.stopAccessingSecurityScopedResource() }
+
+        do {
+            let data = try url.bookmarkData(
+                options: bookmarkCreationOpts,
+                includingResourceValuesForKeys: nil,
+                relativeTo: nil
+            )
+            UserDefaults.standard.set(data, forKey: bookmarkKey)
+            hasLinkedFile = true
+            syncStatusMessage = "Linked to iCloud Drive successfully"
+        } catch {
+            syncStatusMessage = "Failed to bookmark iCloud file: \(error.localizedDescription)"
+        }
+    }
+
+    public func clearBookmark() {
+        UserDefaults.standard.removeObject(forKey: bookmarkKey)
+        checkLinkedStatus()
+        syncStatusMessage = "iCloud link cleared"
+    }
+
+    // MARK: - URL Resolution
+    public struct ResolvedLocation {
+        public let fileURL: URL
+        public let isSecurityScoped: Bool
+        public let isUbiquitous: Bool
+        public let description: String
+    }
+
+    public func resolveSyncLocation() -> ResolvedLocation? {
+        // 1. Check official Apple Ubiquity Container (CloudDocuments)
+        if let containerURL = FileManager.default.url(forUbiquityContainerIdentifier: nil) {
+            let docsURL = containerURL.appendingPathComponent("Documents", isDirectory: true)
+            try? FileManager.default.createDirectory(at: docsURL, withIntermediateDirectories: true)
+            let syncFile = docsURL.appendingPathComponent("LifesaverSync.json")
+            return ResolvedLocation(
+                fileURL: syncFile,
+                isSecurityScoped: false,
+                isUbiquitous: true,
+                description: "iCloud Ubiquity Container"
+            )
+        }
+
+        // 2. Check user-selected security-scoped bookmark (crucial for iPad Files app access!)
+        if let bookmarkData = UserDefaults.standard.data(forKey: bookmarkKey) {
+            var isStale = false
+            if let bookmarkedURL = try? URL(resolvingBookmarkData: bookmarkData, options: bookmarkResolutionOpts, relativeTo: nil, bookmarkDataIsStale: &isStale) {
+                if isStale {
+                    _ = bookmarkedURL.startAccessingSecurityScopedResource()
+                    if let freshData = try? bookmarkedURL.bookmarkData(options: bookmarkCreationOpts, includingResourceValuesForKeys: nil, relativeTo: nil) {
+                        UserDefaults.standard.set(freshData, forKey: bookmarkKey)
+                    }
+                    bookmarkedURL.stopAccessingSecurityScopedResource()
+                }
+
+                let finalFile: URL
+                if bookmarkedURL.hasDirectoryPath {
+                    finalFile = bookmarkedURL.appendingPathComponent("LifesaverSync.json")
+                } else {
+                    finalFile = bookmarkedURL
+                }
+
+                return ResolvedLocation(
+                    fileURL: finalFile,
+                    isSecurityScoped: true,
+                    isUbiquitous: true,
+                    description: "Linked iCloud Drive File"
+                )
+            }
+        }
+
+        // 3. On macOS: local iCloud Drive directory in user library
+        #if os(macOS)
+        let home = FileManager.default.homeDirectoryForCurrentUser
+        let cloudDocs = home.appendingPathComponent("Library/Mobile Documents/com~apple~CloudDocs/Lifesaver", isDirectory: true)
+        try? FileManager.default.createDirectory(at: cloudDocs, withIntermediateDirectories: true)
+        let syncFile = cloudDocs.appendingPathComponent("LifesaverSync.json")
+        return ResolvedLocation(
+            fileURL: syncFile,
+            isSecurityScoped: false,
+            isUbiquitous: true,
+            description: "macOS iCloud Drive"
+        )
+        #else
+        // 4. On iOS/iPadOS fallback to app sandbox Documents
+        if let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+            let syncFile = docs.appendingPathComponent("LifesaverSync.json")
+            return ResolvedLocation(
+                fileURL: syncFile,
+                isSecurityScoped: false,
+                isUbiquitous: false,
+                description: "Local iPad Storage (Link to iCloud Drive in Settings)"
+            )
+        }
+        return nil
+        #endif
+    }
+
+    // MARK: - Universal AutoSync (macOS, iPadOS, iOS)
+    @discardableResult
+    public func autoSync(store: LifesaverStore) -> Bool {
+        guard !isSyncing else { return false }
+        isSyncing = true
+
+        guard let location = resolveSyncLocation() else {
+            isSyncing = false
+            syncStatusMessage = "No sync location available"
+            return false
+        }
+
+        let fileURL = location.fileURL
+        let isScoped = location.isSecurityScoped
+
+        if isScoped {
+            guard fileURL.startAccessingSecurityScopedResource() else {
+                isSyncing = false
+                syncStatusMessage = "Could not access linked iCloud file (permission denied)"
+                return false
+            }
+        }
+
+        defer {
+            if isScoped {
+                fileURL.stopAccessingSecurityScopedResource()
+            }
+            isSyncing = false
+        }
+
+        // 1. Coordinate Read (Pull from iCloud)
+        var coordinatorError: NSError?
+        let coordinator = NSFileCoordinator(filePresenter: nil)
+
+        if FileManager.default.fileExists(atPath: fileURL.path) {
+            coordinator.coordinate(readingItemAt: fileURL, options: [], error: &coordinatorError) { readURL in
+                if let data = try? Data(contentsOf: readURL) {
+                    importJSONData(data, into: store)
+                }
+            }
+        }
+
+        // 2. Coordinate Write (Push merged data to iCloud)
+        guard let exportData = exportJSONData(store: store) else {
+            syncStatusMessage = "Failed to encode sync data"
+            return false
+        }
+
+        var writeSuccess = false
+        coordinator.coordinate(writingItemAt: fileURL, options: .forReplacing, error: &coordinatorError) { writeURL in
+            do {
+                try exportData.write(to: writeURL, options: .atomic)
+                writeSuccess = true
+            } catch {
+                print("iCloud write error: \(error)")
+            }
+        }
+
+        if writeSuccess {
+            lastSyncDate = Date.now
+            let timeStr = Date.now.formatted(date: .omitted, time: .shortened)
+            syncStatusMessage = "Synced with \(location.description) at \(timeStr)"
+            return true
+        } else {
+            syncStatusMessage = "Sync failed: \(coordinatorError?.localizedDescription ?? "Write error")"
+            return false
+        }
+    }
+
+    // MARK: - Legacy Compatibility wrapper
+    #if os(macOS)
+    @discardableResult
+    public func autoSyncLocalMacCloudDocs(store: LifesaverStore) -> Bool {
+        autoSync(store: store)
+    }
+    #endif
+
+    // MARK: - Payload Generation
     public func generatePayload(store: LifesaverStore) -> SyncPayload {
         let allGoals = (try? store.modelContext.fetch(FetchDescriptor<GoalItem>())) ?? []
         let allTasks = (try? store.modelContext.fetch(FetchDescriptor<TaskItem>())) ?? []
@@ -90,6 +298,7 @@ public final class iCloudDriveSyncManager {
                 priorityRaw: task.priorityRaw,
                 estimatedPomodoros: task.estimatedPomodoros,
                 completedPomodoros: task.completedPomodoros,
+                loggedMinutes: task.loggedMinutes,
                 createdAt: task.createdAt,
                 completedAt: task.completedAt,
                 orderIndex: task.orderIndex,
@@ -107,7 +316,7 @@ public final class iCloudDriveSyncManager {
         }
 
         return SyncPayload(
-            version: 2,
+            version: 3,
             exportedAt: Date.now,
             goals: syncGoals,
             tasks: syncTasks,
@@ -203,6 +412,9 @@ public final class iCloudDriveSyncManager {
                     existing.isCompleted = true
                     existing.completedAt = st.completedAt ?? Date.now
                 }
+                if let logged = st.loggedMinutes, logged > existing.loggedMinutes {
+                    existing.loggedMinutes = logged
+                }
                 if existing.goal == nil && targetGoal != nil {
                     existing.goal = targetGoal
                     targetGoal?.tasks?.append(existing)
@@ -227,13 +439,14 @@ public final class iCloudDriveSyncManager {
                 newTask.isCompleted = st.isCompleted
                 newTask.createdAt = st.createdAt
                 newTask.completedAt = st.completedAt
+                newTask.loggedMinutes = st.loggedMinutes ?? 0
                 context.insert(newTask)
                 targetGoal?.tasks?.append(newTask)
                 targetDay?.tasks?.append(newTask)
             }
         }
 
-        // 4. Merge Weekly Goals if present
+        // 4. Merge Weekly Goals
         if let weeklyGoals = payload.weeklyGoals {
             for goal in weeklyGoals {
                 if !store.currentWeek.weeklyGoals.contains(goal) {
@@ -248,35 +461,4 @@ public final class iCloudDriveSyncManager {
         isSyncing = false
         syncStatusMessage = "Merged \(payload.goals?.count ?? 0) goals and \(payload.tasks.count) tasks successfully"
     }
-
-    #if os(macOS)
-    @discardableResult
-    public func autoSyncLocalMacCloudDocs(store: LifesaverStore) -> Bool {
-        isSyncing = true
-        let home = FileManager.default.homeDirectoryForCurrentUser
-        let cloudDocs = home.appendingPathComponent("Library/Mobile Documents/com~apple~CloudDocs/Lifesaver", isDirectory: true)
-
-        try? FileManager.default.createDirectory(at: cloudDocs, withIntermediateDirectories: true)
-        let syncFile = cloudDocs.appendingPathComponent("LifesaverSync.json")
-
-        // 1. Read existing file from iCloud Drive if newer
-        if FileManager.default.fileExists(atPath: syncFile.path) {
-            if let data = try? Data(contentsOf: syncFile) {
-                importJSONData(data, into: store)
-            }
-        }
-
-        // 2. Export updated merged data back to iCloud Drive
-        if let exportData = exportJSONData(store: store) {
-            try? exportData.write(to: syncFile, options: .atomic)
-            lastSyncDate = Date.now
-            isSyncing = false
-            syncStatusMessage = "Synced with iCloud Drive at \(Date.now.formatted(date: .omitted, time: .shortened))"
-            return true
-        }
-        isSyncing = false
-        syncStatusMessage = "Sync failed"
-        return false
-    }
-    #endif
 }
