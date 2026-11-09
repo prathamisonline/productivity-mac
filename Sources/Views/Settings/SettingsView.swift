@@ -27,6 +27,7 @@ public struct SettingsView: View {
     @Bindable var store: LifesaverStore
     @State private var syncManager = iCloudDriveSyncManager.shared
     @AppStorage("autoSyncOnLaunch") private var autoSyncOnLaunch: Bool = true
+    @AppStorage("defaultStartingPage") private var defaultStartingPage: String = LifesaverStore.StartingPage.daily.rawValue
     @State private var showResetConfirmation: Bool = false
     @State private var toastMessage: String? = nil
 
@@ -160,16 +161,16 @@ public struct SettingsView: View {
             }
         }
         .confirmationDialog(
-            "Reset & Reseed Sample Data?",
+            "Reset Database to Blank?",
             isPresented: $showResetConfirmation,
             titleVisibility: .visible
         ) {
-            Button("Reset & Reseed Goals", role: .destructive) {
-                resetAndReseed()
+            Button("Erase All Data & Reset", role: .destructive) {
+                resetToBlank()
             }
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text("This will remove all current goals and tasks, and restore the initial 3-tier starter roadmap.")
+            Text("This will permanently remove all goals, tasks, journal notes, and timer sessions. The app will be completely blank and nothing will be seeded.")
         }
     }
 
@@ -349,18 +350,32 @@ public struct SettingsView: View {
                 .foregroundStyle(Color.secondary)
                 .tracking(0.5)
 
-            VStack(spacing: 10) {
-                HStack {
-                    Text("Default Starting Stage")
-                        .font(.system(size: 13, weight: .medium))
+            VStack(spacing: 12) {
+                HStack(alignment: .center) {
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text("Default Starting Page")
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundStyle(Color.primary)
+                        Text("View opened automatically when Lifesaver launches")
+                            .font(.system(size: 11))
+                            .foregroundStyle(Color.secondary)
+                    }
+
                     Spacer()
-                    Picker("", selection: $store.selectedGoalTab) {
-                        ForEach(GoalItem.AppStageTab.allCases) { type in
-                            Text(type.shortName).tag(type)
+
+                    Picker("", selection: $defaultStartingPage) {
+                        ForEach(LifesaverStore.StartingPage.allCases) { page in
+                            Label(page.title, systemImage: page.icon)
+                                .tag(page.rawValue)
                         }
                     }
-                    .pickerStyle(.segmented)
-                    .frame(width: 290)
+                    .pickerStyle(.menu)
+                    .frame(minWidth: 170, alignment: .trailing)
+                    .onChange(of: defaultStartingPage) { _, newRaw in
+                        if let page = LifesaverStore.StartingPage(rawValue: newRaw) {
+                            store.applyStartingPage(page)
+                        }
+                    }
                 }
 
                 Divider()
@@ -422,9 +437,9 @@ public struct SettingsView: View {
 
                 HStack {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Reset Roadmap to Samples")
+                        Text("Reset Database")
                             .font(.system(size: 13, weight: .medium))
-                        Text("Replace all goals and tasks with fresh starter sample roadmap.")
+                        Text("Erase all goals, tasks, and journal entries. Starts fresh with a blank database.")
                             .font(.system(size: 11))
                             .foregroundStyle(Color.secondary)
                     }
@@ -434,7 +449,7 @@ public struct SettingsView: View {
                     Button(role: .destructive, action: {
                         showResetConfirmation = true
                     }) {
-                        Text("Reset & Reseed...")
+                        Text("Reset to Blank...")
                             .font(.system(size: 12, weight: .semibold))
                             .foregroundStyle(Color.red)
                             .padding(.horizontal, 12)
@@ -534,15 +549,9 @@ public struct SettingsView: View {
         #endif
     }
 
-    private func resetAndReseed() {
-        let context = store.modelContext
-        let goals = (try? context.fetch(FetchDescriptor<GoalItem>())) ?? []
-        for g in goals { context.delete(g) }
-        let tasks = (try? context.fetch(FetchDescriptor<TaskItem>())) ?? []
-        for t in tasks { context.delete(t) }
-        try? context.save()
-        store.seedInitialGoalsIfNeeded()
-        showToast("Roadmap reseeded!")
+    private func resetToBlank() {
+        store.resetAllData()
+        showToast("All data cleared. Database is now blank.")
     }
 
     private func showToast(_ msg: String) {

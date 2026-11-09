@@ -34,6 +34,85 @@ public final class LifesaverStore {
     public var isNewGoalSheetPresented: Bool = false
     public var newGoalTargetType: GoalItem.GoalType = .longTerm
 
+    // MARK: - Workspace Mode (Goals & Execution vs. Daily Journal)
+    public enum WorkspaceMode: String, CaseIterable, Identifiable {
+        case goals = "goals"
+        case journal = "journal"
+
+        public var id: String { rawValue }
+        public var title: String {
+            switch self {
+            case .goals: return "Goals"
+            case .journal: return "Journal"
+            }
+        }
+        public var icon: String {
+            switch self {
+            case .goals: return "target"
+            case .journal: return "book.closed.fill"
+            }
+        }
+    }
+
+    public enum StartingPage: String, CaseIterable, Identifiable {
+        case daily = "daily"
+        case shortTerm = "shortTerm"
+        case longTerm = "longTerm"
+        case matrices = "matrices"
+        case journal = "journal"
+
+        public var id: String { rawValue }
+
+        public var title: String {
+            switch self {
+            case .daily: return "Daily Goals"
+            case .shortTerm: return "Short-Term Goals"
+            case .longTerm: return "Long-Term Goals"
+            case .matrices: return "Time & Metrics"
+            case .journal: return "Journal"
+            }
+        }
+
+        public var icon: String {
+            switch self {
+            case .daily: return "calendar"
+            case .shortTerm: return "bolt.fill"
+            case .longTerm: return "target"
+            case .matrices: return "chart.bar.xaxis"
+            case .journal: return "book.closed.fill"
+            }
+        }
+    }
+
+    public var activeWorkspaceMode: WorkspaceMode = .goals
+    public var deletedJournalDates: Set<Date> = []
+
+    public func applyStartingPage(_ page: StartingPage) {
+        switch page {
+        case .journal:
+            activeWorkspaceMode = .journal
+        case .daily:
+            activeWorkspaceMode = .goals
+            selectedGoalTab = .daily
+        case .shortTerm:
+            activeWorkspaceMode = .goals
+            selectedGoalTab = .shortTerm
+        case .longTerm:
+            activeWorkspaceMode = .goals
+            selectedGoalTab = .longTerm
+        case .matrices:
+            activeWorkspaceMode = .goals
+            selectedGoalTab = .matrices
+        }
+        notifyChange()
+    }
+
+    public func loadSavedStartingPage() {
+        let savedRaw = UserDefaults.standard.string(forKey: "defaultStartingPage") ?? StartingPage.daily.rawValue
+        let page = StartingPage(rawValue: savedRaw) ?? .daily
+        applyStartingPage(page)
+    }
+
     public func notifyChange() {
         revision &+= 1
         try? modelContext.save()
@@ -55,6 +134,7 @@ public final class LifesaverStore {
         let currentDay = fetchOrCreateDay(for: today)
         self.activeTask = currentDay.tasks?.first(where: { !$0.isCompleted })
         self.seedInitialGoalsIfNeeded()
+        self.loadSavedStartingPage()
     }
 
     public static func startOfWeek(for date: Date) -> Date {
@@ -482,6 +562,77 @@ public final class LifesaverStore {
     public func saveReflectionNotes(for day: PlanDay, notes: String) {
         day.reflectionNotes = notes
         notifyChange()
+    }
+
+    // MARK: - Journal Operations
+    public func allJournalDays() -> [PlanDay] {
+        _ = revision
+        let allDays = (try? modelContext.fetch(FetchDescriptor<PlanDay>(sortBy: [SortDescriptor(\.date, order: .reverse)]))) ?? []
+        return allDays.filter { !$0.reflectionNotes.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+    }
+
+    public func saveJournalText(for date: Date, fullText: String) {
+        let norm = Calendar.current.startOfDay(for: date)
+        if !fullText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            deletedJournalDates.remove(norm)
+        }
+        let day = fetchOrCreateDay(for: date)
+        day.reflectionNotes = fullText
+        notifyChange()
+        Task { @MainActor in
+            iCloudDriveSyncManager.shared.autoSync(store: self, pullFirst: false)
+        }
+    }
+
+    public func deleteJournalText(for day: PlanDay) {
+        let norm = Calendar.current.startOfDay(for: day.date)
+        deletedJournalDates.insert(norm)
+        day.reflectionNotes = ""
+        if (day.tasks ?? []).isEmpty {
+            modelContext.delete(day)
+        }
+        try? modelContext.save()
+        notifyChange()
+        Task { @MainActor in
+            iCloudDriveSyncManager.shared.autoSync(store: self, pullFirst: false)
+        }
+    }
+
+    public func deleteJournal(for date: Date) {
+        let norm = Calendar.current.startOfDay(for: date)
+        let allDays = (try? modelContext.fetch(FetchDescriptor<PlanDay>())) ?? []
+        if let day = allDays.first(where: { Calendar.current.isDate($0.date, inSameDayAs: norm) }) {
+            deleteJournalText(for: day)
+        }
+    }
+
+    // MARK: - Reset Database to Blank
+    public func resetAllData() {
+        UserDefaults.standard.set(true, forKey: "hasCompletedInitialSeed")
+        activeTask = nil
+        deletedJournalDates = []
+
+        let goals = (try? modelContext.fetch(FetchDescriptor<GoalItem>())) ?? []
+        for g in goals { modelContext.delete(g) }
+
+        let tasks = (try? modelContext.fetch(FetchDescriptor<TaskItem>())) ?? []
+        for t in tasks { modelContext.delete(t) }
+
+        let days = (try? modelContext.fetch(FetchDescriptor<PlanDay>())) ?? []
+        for d in days { modelContext.delete(d) }
+
+        let weeks = (try? modelContext.fetch(FetchDescriptor<PlanWeek>())) ?? []
+        for w in weeks { modelContext.delete(w) }
+
+        let sessions = (try? modelContext.fetch(FetchDescriptor<PomodoroSession>())) ?? []
+        for s in sessions { modelContext.delete(s) }
+
+        try? modelContext.save()
+        notifyChange()
+
+        Task { @MainActor in
+            iCloudDriveSyncManager.shared.autoSync(store: self, pullFirst: false)
+        }
     }
 
     

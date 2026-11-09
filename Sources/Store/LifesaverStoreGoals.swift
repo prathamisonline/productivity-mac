@@ -252,9 +252,15 @@ extension LifesaverStore {
     // MARK: - Seed Initial Sample Data
 
     public func seedInitialGoalsIfNeeded() {
+        let hasSeeded = UserDefaults.standard.bool(forKey: "hasCompletedInitialSeed")
+        guard !hasSeeded else { return }
+
         let descriptor = FetchDescriptor<GoalItem>()
         let count = (try? modelContext.fetchCount(descriptor)) ?? 0
-        guard count == 0 else { return }
+        guard count == 0 else {
+            UserDefaults.standard.set(true, forKey: "hasCompletedInitialSeed")
+            return
+        }
 
         // 1. Long Term Goal: Macro Vision
         let ltGoal = GoalItem(
@@ -316,5 +322,6 @@ extension LifesaverStore {
         dGoal.tasks = [dTask1, dTask2, dTask3]
 
         try? modelContext.save()
+        UserDefaults.standard.set(true, forKey: "hasCompletedInitialSeed")
     }
 }

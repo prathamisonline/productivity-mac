@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8A11000129DA4128FBFD0001 /* Sources/Views/Journal/JournalEntryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A110002C367BC4CEBDD0001 /* Sources/Views/Journal/JournalEntryCardView.swift */; };
+		8A11000129DA4128FBFD0002 /* Sources/Views/Journal/BottomWorkspaceStripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A110002C367BC4CEBDD0002 /* Sources/Views/Journal/BottomWorkspaceStripView.swift */; };
+		8A11000129DA4128FBFD0003 /* Sources/Views/Journal/JournalStudioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A110002C367BC4CEBDD0003 /* Sources/Views/Journal/JournalStudioView.swift */; };
+		8A11000129DA4128FBFD0004 /* Sources/Views/Journal/JournalCalendarPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A110002C367BC4CEBDD0004 /* Sources/Views/Journal/JournalCalendarPickerView.swift */; };
 		7A35F4829BB14CD39FE301AA /* Sources/Views/Goals/GitHubYearlyActivityMatrixView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B49E7C2A10D49EFB017688F /* Sources/Views/Goals/GitHubYearlyActivityMatrixView.swift */; };
 		933C71751603454F2C39748E /* Sources/Views/Goals/TaskTimeLogPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C7B91539F15ECC596C4A62 /* Sources/Views/Goals/TaskTimeLogPopover.swift */; };
 		81E634B919DA4128FBFD5354 /* Sources/Views/Goals/MatricesStageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A650DC8CC367BC4CEBDD3582 /* Sources/Views/Goals/MatricesStageView.swift */; };
@@ -39,6 +43,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8A110002C367BC4CEBDD0001 /* Sources/Views/Journal/JournalEntryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/Journal/JournalEntryCardView.swift; sourceTree = "<group>"; };
+		8A110002C367BC4CEBDD0002 /* Sources/Views/Journal/BottomWorkspaceStripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/Journal/BottomWorkspaceStripView.swift; sourceTree = "<group>"; };
+		8A110002C367BC4CEBDD0003 /* Sources/Views/Journal/JournalStudioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/Journal/JournalStudioView.swift; sourceTree = "<group>"; };
+		8A110002C367BC4CEBDD0004 /* Sources/Views/Journal/JournalCalendarPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/Journal/JournalCalendarPickerView.swift; sourceTree = "<group>"; };
 		8B49E7C2A10D49EFB017688F /* Sources/Views/Goals/GitHubYearlyActivityMatrixView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/Goals/GitHubYearlyActivityMatrixView.swift; sourceTree = "<group>"; };
 		47C7B91539F15ECC596C4A62 /* Sources/Views/Goals/TaskTimeLogPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/Goals/TaskTimeLogPopover.swift; sourceTree = "<group>"; };
 		A650DC8CC367BC4CEBDD3582 /* Sources/Views/Goals/MatricesStageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/Views/Goals/MatricesStageView.swift; sourceTree = "<group>"; };
@@ -85,6 +93,10 @@
 		A00000000000000000000002 = {
 			isa = PBXGroup;
 			children = (
+				8A110002C367BC4CEBDD0001 /* Sources/Views/Journal/JournalEntryCardView.swift */,
+				8A110002C367BC4CEBDD0002 /* Sources/Views/Journal/BottomWorkspaceStripView.swift */,
+				8A110002C367BC4CEBDD0003 /* Sources/Views/Journal/JournalStudioView.swift */,
+				8A110002C367BC4CEBDD0004 /* Sources/Views/Journal/JournalCalendarPickerView.swift */,
 				8B49E7C2A10D49EFB017688F /* Sources/Views/Goals/GitHubYearlyActivityMatrixView.swift */,
 				47C7B91539F15ECC596C4A62 /* Sources/Views/Goals/TaskTimeLogPopover.swift */,
 				A650DC8CC367BC4CEBDD3582 /* Sources/Views/Goals/MatricesStageView.swift */,
@@ -201,6 +213,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A11000129DA4128FBFD0001 /* Sources/Views/Journal/JournalEntryCardView.swift in Sources */,
+				8A11000129DA4128FBFD0002 /* Sources/Views/Journal/BottomWorkspaceStripView.swift in Sources */,
+				8A11000129DA4128FBFD0003 /* Sources/Views/Journal/JournalStudioView.swift in Sources */,
+				8A11000129DA4128FBFD0004 /* Sources/Views/Journal/JournalCalendarPickerView.swift in Sources */,
 				7A35F4829BB14CD39FE301AA /* Sources/Views/Goals/GitHubYearlyActivityMatrixView.swift in Sources */,
 				933C71751603454F2C39748E /* Sources/Views/Goals/TaskTimeLogPopover.swift in Sources */,
 				81E634B919DA4128FBFD5354 /* Sources/Views/Goals/MatricesStageView.swift in Sources */,

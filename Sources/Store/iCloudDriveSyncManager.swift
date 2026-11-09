@@ -9,6 +9,7 @@ public struct SyncPayload: Codable {
     public let tasks: [SyncTask]
     public let days: [SyncDay]
     public let weeklyGoals: [String]?
+    public let deletedJournalDates: [Date]?
 
     public struct SyncGoal: Codable, Identifiable {
         public let id: UUID
@@ -190,7 +191,7 @@ public final class iCloudDriveSyncManager {
 
     // MARK: - Universal AutoSync (macOS, iPadOS, iOS)
     @discardableResult
-    public func autoSync(store: LifesaverStore) -> Bool {
+    public func autoSync(store: LifesaverStore, pullFirst: Bool = false) -> Bool {
         guard !isSyncing else { return false }
         isSyncing = true
 
@@ -218,11 +219,11 @@ public final class iCloudDriveSyncManager {
             isSyncing = false
         }
 
-        // 1. Coordinate Read (Pull from iCloud)
         var coordinatorError: NSError?
         let coordinator = NSFileCoordinator(filePresenter: nil)
 
-        if FileManager.default.fileExists(atPath: fileURL.path) {
+        // 1. Coordinate Read (Only when explicitly pulling remote changes first)
+        if pullFirst && FileManager.default.fileExists(atPath: fileURL.path) {
             coordinator.coordinate(readingItemAt: fileURL, options: [], error: &coordinatorError) { readURL in
                 if let data = try? Data(contentsOf: readURL) {
                     importJSONData(data, into: store)
@@ -230,7 +231,7 @@ public final class iCloudDriveSyncManager {
             }
         }
 
-        // 2. Coordinate Write (Push merged data to iCloud)
+        // 2. Coordinate Write (Push latest state to iCloud)
         guard let exportData = exportJSONData(store: store) else {
             syncStatusMessage = "Failed to encode sync data"
             return false
@@ -308,12 +309,14 @@ public final class iCloudDriveSyncManager {
             )
         }
 
-        let syncDays = allDays.map { day in
-            SyncPayload.SyncDay(
-                date: day.date,
-                reflectionNotes: day.reflectionNotes
-            )
-        }
+        let syncDays = allDays
+            .filter { !$0.reflectionNotes.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || !($0.tasks ?? []).isEmpty }
+            .map { day in
+                SyncPayload.SyncDay(
+                    date: day.date,
+                    reflectionNotes: day.reflectionNotes
+                )
+            }
 
         return SyncPayload(
             version: 3,
@@ -321,7 +324,8 @@ public final class iCloudDriveSyncManager {
             goals: syncGoals,
             tasks: syncTasks,
             days: syncDays,
-            weeklyGoals: currentWeekGoals
+            weeklyGoals: currentWeekGoals,
+            deletedJournalDates: Array(store.deletedJournalDates)
         )
     }
 
@@ -386,13 +390,32 @@ public final class iCloudDriveSyncManager {
         let existingDays = (try? context.fetch(FetchDescriptor<PlanDay>())) ?? []
         var dayMap: [Date: PlanDay] = Dictionary(uniqueKeysWithValues: existingDays.map { ($0.date, $0) })
 
+        // Apply explicitly deleted journal dates (tombstones)
+        if let deletedDates = payload.deletedJournalDates {
+            for d in deletedDates {
+                let norm = Calendar.current.startOfDay(for: d)
+                store.deletedJournalDates.insert(norm)
+                if let existing = dayMap[norm] {
+                    existing.reflectionNotes = ""
+                    if (existing.tasks ?? []).isEmpty {
+                        context.delete(existing)
+                        dayMap.removeValue(forKey: norm)
+                    }
+                }
+            }
+        }
+
         for syncDay in payload.days {
             let normalizedDate = Calendar.current.startOfDay(for: syncDay.date)
+            // Never resurrect a date that was marked deleted
+            if store.deletedJournalDates.contains(normalizedDate) {
+                continue
+            }
             if let existing = dayMap[normalizedDate] {
                 if existing.reflectionNotes.isEmpty && !syncDay.reflectionNotes.isEmpty {
                     existing.reflectionNotes = syncDay.reflectionNotes
                 }
-            } else {
+            } else if !syncDay.reflectionNotes.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                 let newDay = PlanDay(date: normalizedDate, reflectionNotes: syncDay.reflectionNotes)
                 context.insert(newDay)
                 dayMap[normalizedDate] = newDay
