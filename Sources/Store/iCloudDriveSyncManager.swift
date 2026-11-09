@@ -189,7 +189,12 @@ public final class iCloudDriveSyncManager {
         #endif
     }
 
-    // MARK: - Universal AutoSync (macOS, iPadOS, iOS)
+    // MARK: - Universal Sync (macOS, iPadOS, iOS)
+    @discardableResult
+    public func syncNow(store: LifesaverStore) -> Bool {
+        return autoSync(store: store, pullFirst: true)
+    }
+
     @discardableResult
     public func autoSync(store: LifesaverStore, pullFirst: Bool = false) -> Bool {
         guard !isSyncing else { return false }

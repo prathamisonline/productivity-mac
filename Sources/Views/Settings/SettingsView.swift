@@ -105,9 +105,6 @@ public struct SettingsView: View {
         .background(ThemeTokens.canvasBackground)
         .onAppear {
             syncManager.checkLinkedStatus()
-            if autoSyncOnLaunch && syncManager.lastSyncDate == nil {
-                syncManager.autoSync(store: store)
-            }
         }
         .fileImporter(
             isPresented: $showLinkFilePicker,
@@ -328,9 +325,15 @@ public struct SettingsView: View {
                     .buttonStyle(.plain)
                 }
 
-                Toggle("Automatically sync with iCloud on startup", isOn: $autoSyncOnLaunch)
-                    .font(.system(size: 12))
-                    .padding(.top, 4)
+                HStack(spacing: 6) {
+                    Image(systemName: "hand.tap.fill")
+                        .font(.system(size: 10))
+                        .foregroundStyle(Color.secondary)
+                    Text("Manual Sync: data syncs between Mac and iPad only when you tap 'Sync Now'.")
+                        .font(.system(size: 11))
+                        .foregroundStyle(Color.secondary)
+                }
+                .padding(.top, 4)
             }
             .padding(16)
             .background(ThemeTokens.cardBackground)
@@ -504,8 +507,8 @@ public struct SettingsView: View {
 
     // MARK: - Actions
     private func triggerManualSync() {
-        let success = syncManager.autoSync(store: store)
-        showToast(success ? "iCloud Sync Complete!" : "Sync status: \(syncManager.syncStatusMessage)")
+        let success = syncManager.syncNow(store: store)
+        showToast(success ? "Manual Sync Complete!" : "Sync status: \(syncManager.syncStatusMessage)")
     }
 
     private func exportBackupFile() {

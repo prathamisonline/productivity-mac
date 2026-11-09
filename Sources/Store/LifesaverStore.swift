@@ -579,9 +579,6 @@ public final class LifesaverStore {
         let day = fetchOrCreateDay(for: date)
         day.reflectionNotes = fullText
         notifyChange()
-        Task { @MainActor in
-            iCloudDriveSyncManager.shared.autoSync(store: self, pullFirst: false)
-        }
     }
 
     public func deleteJournalText(for day: PlanDay) {
@@ -593,9 +590,6 @@ public final class LifesaverStore {
         }
         try? modelContext.save()
         notifyChange()
-        Task { @MainActor in
-            iCloudDriveSyncManager.shared.autoSync(store: self, pullFirst: false)
-        }
     }
 
     public func deleteJournal(for date: Date) {
@@ -629,10 +623,6 @@ public final class LifesaverStore {
 
         try? modelContext.save()
         notifyChange()
-
-        Task { @MainActor in
-            iCloudDriveSyncManager.shared.autoSync(store: self, pullFirst: false)
-        }
     }
 
     

@@ -21,18 +21,6 @@ public struct AppShellView: View {
             if store == nil {
                 store = LifesaverStore(modelContext: modelContext)
             }
-            if let store {
-                Task { @MainActor in
-                    iCloudDriveSyncManager.shared.autoSync(store: store)
-                }
-            }
-        }
-        .onChange(of: scenePhase) { _, newPhase in
-            if newPhase == .active, let store {
-                Task { @MainActor in
-                    iCloudDriveSyncManager.shared.autoSync(store: store)
-                }
-            }
         }
         #if os(macOS)
         .frame(minWidth: 800, minHeight: 600)
@@ -43,6 +31,7 @@ public struct AppShellView: View {
 public struct MainGoalAppView: View {
     @Bindable var store: LifesaverStore
     @State private var isSettingsPresented: Bool = false
+    @State private var isSyncingAnim: Bool = false
 
     public init(store: LifesaverStore) {
         self.store = store
@@ -137,6 +126,34 @@ public struct MainGoalAppView: View {
                         .help("Add New Goal")
                     }
 
+                    // Manual Sync Button
+                    Button(action: {
+                        performManualSync()
+                    }) {
+                        HStack(spacing: 5) {
+                            Image(systemName: "arrow.triangle.2.circlepath")
+                                .font(.system(size: 11, weight: .bold))
+                                .rotationEffect(.degrees(isSyncingAnim ? 360 : 0))
+                                .animation(isSyncingAnim ? .linear(duration: 0.85).repeatForever(autoreverses: false) : .default, value: isSyncingAnim)
+
+                            if let lastSync = iCloudDriveSyncManager.shared.lastSyncDate {
+                                Text(lastSync.formatted(date: .omitted, time: .shortened))
+                                    .font(.system(size: 10, weight: .medium, design: .monospaced))
+                                    .foregroundStyle(Color.secondary)
+                            } else {
+                                Text("Sync")
+                                    .font(.system(size: 11, weight: .medium))
+                                    .foregroundStyle(Color.secondary)
+                            }
+                        }
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 5)
+                        .background(Color.primary.opacity(0.05))
+                        .clipShape(Capsule())
+                    }
+                    .buttonStyle(.plain)
+                    .help("Manual iCloud Sync (pull remote & push local)")
+
                     // Settings Button
                     Button(action: {
                         isSettingsPresented = true
@@ -209,5 +226,14 @@ public struct MainGoalAppView: View {
         }
         .buttonStyle(.plain)
         .keyboardShortcut(shortcut, modifiers: .command)
+    }
+
+    private func performManualSync() {
+        withAnimation { isSyncingAnim = true }
+        Task { @MainActor in
+            _ = iCloudDriveSyncManager.shared.syncNow(store: store)
+            try? await Task.sleep(for: .milliseconds(700))
+            withAnimation { isSyncingAnim = false }
+        }
     }
 }

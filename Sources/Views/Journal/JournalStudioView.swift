@@ -354,7 +354,7 @@ public struct JournalStudioView: View {
                     .fill(Color.green)
                     .frame(width: 6, height: 6)
 
-                Text("Auto-saved to iCloud")
+                Text("Saved locally")
                     .font(.system(size: 11))
                     .foregroundStyle(Color.secondary)
             }
